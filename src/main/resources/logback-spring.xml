@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property resource="application.properties" />
+	<contextName>${spring.application.name}</contextName>
+	
+	<appender name="typical-format-console"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%-5level %d{HH:mm:ss.SSS} %logger{36} [%thread] - %msg%n</pattern>
+		</layout>
+	</appender>
+	<appender name="structured-format-console"
+		class="ch.qos.logback.core.ConsoleAppender">
+ 		<encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+			<providers>
+				<logLevel>
+					<fieldName>level</fieldName>
+				</logLevel>
+				<timestamp>
+					<fieldName>timestamp</fieldName>
+				</timestamp>
+				<contextName>
+					<fieldName>component</fieldName>
+				</contextName>
+				<loggerName>
+					<fieldName>logger</fieldName>
+				</loggerName>
+				<threadName>
+					<fieldName>thread</fieldName>
+				</threadName>
+				<!--
+				<callerData>
+					<classFieldName>class</classFieldName>
+					<methodFieldName>method</methodFieldName>
+					<lineFieldName>line</lineFieldName>
+					<fileFieldName>file</fileFieldName>
+				</callerData>
+				<arguments>
+					<includeNonStructuredArguments>false</includeNonStructuredArguments>
+				</arguments>
+				  -->
+   				<message>
+					<fieldName>message</fieldName>
+				</message>
+				<stackTrace>
+					<fieldName>stack</fieldName>
+				</stackTrace>
+				<tags>
+					<fieldName>tags</fieldName>
+				</tags>
+			</providers>
+		</encoder>
+    </appender>
+
+	<!-- LOG everything at INFO level -->
+	<root level="info">
+		<appender-ref ref="typical-format-console" />
+	</root>
+
+	<!-- LOG "dev.gabrieljbo" at TRACE level -->
+	<logger name="dev.gabrieljbo" level="trace" additivity="false">
+		<appender-ref ref="structured-format-console" />
+	</logger>
+
+</configuration>
